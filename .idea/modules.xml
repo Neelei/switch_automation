@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../CH-ANTIBES/.idea/CH-ANTIBES.iml" filepath="$PROJECT_DIR$/../CH-ANTIBES/.idea/CH-ANTIBES.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/SWITCH-AUTOMATION.iml" filepath="$PROJECT_DIR$/.idea/SWITCH-AUTOMATION.iml" />
+    </modules>
+  </component>
+</project>
