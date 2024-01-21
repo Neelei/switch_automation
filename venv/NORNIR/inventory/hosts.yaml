@@ -1,0 +1,20 @@
+# hosts.yaml
+---
+CSR1000v:
+  hostname: 192.168.1.110
+  port: 22
+  platform: ios
+  groups:
+    - cisco
+  connection_options:
+    napalm:
+      extras:
+        optional_args:
+          secret: admin123
+
+vSRX:
+  hostname: 192.168.1.120
+  port: 22
+  platform: junos
+  groups:
+    - juniper

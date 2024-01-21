@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Configuration Switch ArubaOS</title>
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        .form-section { margin-bottom: 30px; }
+        .form-section h2 { background-color: #cc0635; padding: 10px; border-radius: 5px; color: white; }
+        .form-container { padding: 15px; border: 1px solid #dee2e6; border-radius: 5px; margin-bottom: 20px; }
+        .form-group { margin-bottom: 15px; }
+        .form-control { margin-bottom: 10px; }
+        .form-label { margin-bottom: 5px; display: block; }
+        .btn-custom { background-color: #007bff; color: white; margin-top: 10px; }
+        .btn-red-md { background-color: #cc0635; color: white; }
+        .btn-margin { margin-bottom: 10px; }
+        .custom-file-input {
+    border-radius: 5px;
+    border: 1px solid #dee2e6;
+}
+.custom-file-label {
+    border-radius: 5px;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+}
+.btn-custom {
+    background-color: #007bff;
+    color: white;
+    margin-top: 10px;
+    border-radius: 5px;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center mt-4 mb-4">CONFIGURATION ARUBA-OS</h1>
+        <form method="POST" action="/submit" enctype="multipart/form-data">
+            <!-- Informations Générales -->
+            <div class="form-section">
+                <!-- Upload firmware -->
+                <div class="form-group">
+                    <label for="file" class="form-label">Fichier à transférer:</label>
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" name="file" id="file">
+                        <label class="custom-file-label" for="file">Upload Firmware</label>
+                    </div>
+                    <div class="form-group">
+                        <label for="ip-client" class="form-label">IP du Client:</label>
+                        <input type="text" class="form-control" name="ip-client" id="ip-client" pattern="^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$">
+                    </div>
+                </div>
+                <h2>Informations Générales</h2>
+
+                <div class="form-container">
+                    <!-- IP, Switch Name, Username, Password -->
+                    <div class="form-group">
+                        <label for="ip" class="form-label">IP du Switch:</label>
+                        <input type="text" class="form-control" name="ip" id="ip" pattern="^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$">
+                    </div>
+                    <div class="form-group">
+                        <label for="switch_name" class="form-label">Nom du Switch:</label>
+                        <input type="text" class="form-control" name="switch_name" id="switch_name">
+                    </div>
+                    <div class="form-group">
+                        <label for="username" class="form-label">Username:</label>
+                        <input type="text" class="form-control" name="username" id="username">
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="form-label">Password:</label>
+                        <input type="password" class="form-control" name="password" id="password">
+                    </div>
+                    <!-- Domain, DNS, NTP, SNMP -->
+                    <div class="form-group">
+                        <label for="domain" class="form-label">Domain:</label>
+                        <input type="text" class="form-control" name="domain" id="domain">
+                    </div>
+                    <div class="form-group">
+                        <label for="dns1" class="form-label">Serveur DNS 1:</label>
+                        <input type="text" class="form-control" name="dns1" id="dns1">
+                    </div>
+                    <div class="form-group">
+                        <label for="dns2" class="form-label">Serveur DNS 2:</label>
+                        <input type="text" class="form-control" name="dns2" id="dns2">
+                    </div>
+                    <div class="form-group">
+                        <label for="ntp" class="form-label">Serveur NTP:</label>
+                        <input type="text" class="form-control" name="ntp" id="ntp">
+                    </div>
+                    <div class="form-group">
+                        <label for="snmp" class="form-label">Communauté SNMP:</label>
+                        <input type="text" class="form-control" name="snmp" id="snmp">
+                    </div>
+                </div>
+            </div>
+            <!-- VLANs -->
+            <div class="form-section">
+                <h2>VLANS</h2>
+                <div class="form-container">
+                    <button type="button" id="add_vlan" class="btn btn-red-md">Ajouter un VLAN</button>
+                    <div id="vlans" class="mt-3">
+                        <!-- Les VLANs seront ajoutés ici -->
+                    </div>
+                </div>
+            </div>
+            <!-- Ports du Switch -->
+            <div class="form-section">
+                <h2>PORTS</h2>
+                <div class="form-container">
+                    <div class="form-group">
+                        <label for="port_count" class="form-label">Choix du nombre de Ports:</label>
+                        <select class="form-control port_count" name="port_count">
+                            <option value="24">24 Ports</option>
+                            <option value="48">48 Ports</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="stack_count" class="form-label">Nombre de Switchs dans le Stack:</label>
+                        <select class="form-control" id="stack_count">
+                            <option value="1">1 Switch</option>
+                            <option value="2">2 Switchs</option>
+                            <option value="3">3 Switch</option>
+                            <option value="4">4 Switchs</option>
+                            <!-- Ajoutez d'autres options si nécessaire -->
+                        </select>
+                    </div>
+                    <button type="button" id="add_ports" class="btn btn-red-md btn-margin">Generate</button>
+                    <div class="ports-container"></div>
+                </div>
+            </div>
+            <!-- Agrégats de Ports -->
+            <div class="form-section">
+                <h2>Agrégats de Ports</h2>
+                <div class="form-container">
+                    <button type="button" id="add_aggregate" class="btn btn-red-md btn-margin">Ajouter un agrégat de ports</button>
+                    <div id="aggregates" class="mt-3">
+                        <!-- Les agrégats de ports seront ajoutés ici -->
+                        <div class="row aggregate-group">
+                            <div class="col-md-3 form-group">
+                                <label for="aggregat_name">Nom :</label>
+                                <input type="text" class="form-control" name="aggregat_name" pattern="trk(?:[1-9]|[1-5][0-9]|60)" placeholder="ex: trk1">
+                            </div>
+                            <div class="col-md-3 form-group">
+                                <label for="aggregat_ports">Ports :</label>
+                                <input type="text" class="form-control" name="aggregat_ports" pattern="(\d+(/\d+)?)(,\s*\d+(/\d+)?)*" placeholder="ex: 23,24 ou 1/23,1/24 si stack" >
+                            </div>
+                            <div class="col-md-3 form-group">
+                                <label for="aggregat_untagged">VLAN Untagged :</label>
+                                <input type="text" class="form-control" name="aggregat_untagged" pattern="^(\d+(-\d+)*,?)+$">
+                            </div>
+                            <div class="col-md-3 form-group">
+                                <label for="aggregat_vlans">VLAN Tagged :</label>
+                                <input type="text" class="form-control" name="aggregat_vlans" pattern="^(\d+(-\d+)*,?)+$">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <input type="submit" value="Appliquer" class="btn btn-red-md">
+        </form>
+    </div>
+    <!-- Test load conf -->
+<div class="form-section">
+    <h2>Charger une Configuration Existante</h2>
+    <div class="form-container">
+        <div class="form-group">
+            <label for="existing_config">Choisir une Configuration :</label>
+            <select class="form-control" id="existing_config" name="existing_config">
+                <!-- Les options seront chargées depuis le serveur -->
+            </select>
+        </div>
+        <button type="button" id="load_config" class="btn btn-red-md">Charger la Configuration</button>
+    </div>
+</div>
+
+</body>
+</html>
+
+
+<!-- Script JavaScript pour ajouter des VLANs -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var addVlanButton = document.getElementById('add_vlan');
+        var vlansDiv = document.getElementById('vlans');
+
+        addVlanButton.addEventListener('click', function() {
+            var newVlan = document.createElement('div');
+            newVlan.className = 'row';
+            newVlan.innerHTML = `
+                <div class="col-md-3 form-group">
+                    <label>ID du VLAN:</label>
+                    <input type="number" class="form-control" name="vlan_id">
+                </div>
+                <div class="col-md-3 form-group">
+                    <label>Nom du VLAN:</label>
+                    <input type="text" class="form-control" name="vlan_name" pattern="[^ ]*">
+                </div>
+            `;
+            vlansDiv.appendChild(newVlan);
+        });
+    });
+</script>
+
+<!-- Script affichier Upload fichier -->
+
+<script>
+    document.getElementById('file').addEventListener('change', function(e) {
+        var fileName = e.target.files[0].name; // Obtenez le nom du fichier
+        var nextSibling = e.target.nextElementSibling; // Ciblez l'élément label suivant
+        nextSibling.innerText = fileName; // Mettez à jour le texte du label
+    });
+</script>
+
+
+<<!-- Script JavaScript pour ajouter des ports -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('add_ports').addEventListener('click', function() {
+            var portsDiv = document.querySelector('.ports-container');
+            var portCount = document.querySelector('.port_count').value;
+            var stackCount = document.getElementById('stack_count').value;
+            var totalEntries = (portCount == 24) ? 28 : 52;
+
+            // Clear existing fields
+            portsDiv.innerHTML = '';
+
+            for (var stackIndex = 1; stackIndex <= stackCount; stackIndex++) {
+                for (var portIndex = 1; portIndex <= totalEntries; portIndex++) {
+                    var newPort = document.createElement('div');
+                    newPort.className = 'row';
+                    var portName = (stackCount == 1) ? portIndex.toString() : stackIndex + '/' + portIndex;
+
+                    newPort.innerHTML = `
+                        <div class="col-md-3 form-group">
+                            <input type="hidden" name="port_id" value="${portName}">
+                            <label>${portName} :</label>
+                            <input type="text" class="form-control" name="port_name">
+                        </div>
+                        <div class="col-md-3 form-group">
+                            <label>VLAN Untagged:</label>
+                            <input type="text" class="form-control" name="port_untagged" pattern="^[0-9]+(,[0-9]+)*$">
+                        </div>
+                        <div class="col-md-3 form-group">
+                            <label>VLANs Tagged :</label>
+                            <input type="text" class="form-control" name="port_vlans" pattern="^[0-9]+(,[0-9]+)*$">
+                        </div>
+                    `;
+                    portsDiv.appendChild(newPort);
+                }
+            }
+        });
+    });
+</script>
+
+<!-- Script JavaScript pour ajouter des agrégats de ports -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var addAggregateButton = document.getElementById('add_aggregate');
+        var aggregatesDiv = document.getElementById('aggregates');
+
+        addAggregateButton.addEventListener('click', function() {
+            var newAggregate = document.createElement('div');
+            newAggregate.className = 'row aggregate-group';
+            newAggregate.innerHTML = `
+                <div class="col-md-3 form-group">
+                    <label for="aggregat_name">Nom :</label>
+                    <input type="text" class="form-control" name="aggregat_name" pattern="trk(?:[1-9]|[1-5][0-9]|60)" placeholder="ex: trk1">
+                </div>
+                <div class="col-md-3 form-group">
+                    <label for="aggregat_ports">Ports :</label>
+                    <input type="text" class="form-control" name="aggregat_ports" pattern="^\\d+(\\/\\d+)?(,\\s*\\d+(\\/\\d+)?)*$" placeholder="ex: 23,24 ou 1/23,1/24 si stack">
+                </div>
+                <div class="col-md-3 form-group">
+                    <label for="aggregat_untagged">VLAN Untagged :</label>
+                    <input type="text" class="form-control" name="aggregat_untagged" pattern="^[0-9]+(,[0-9]+)*$">
+                </div>
+                <div class="col-md-3 form-group">
+                    <label for="aggregat_vlans">VLAN Tagged :</label>
+                    <input type="text" class="form-control" name="aggregat_vlans" pattern="^[0-9]+(,[0-9]+)*$">
+                </div>
+            `;
+            aggregatesDiv.appendChild(newAggregate);
+        });
+    });
+</script>
+<!-- Script JavaScript pour le stockage local -->
+<!--    <script>-->
+<!--        // Fonction pour sauvegarder les données dans le stockage local-->
+<!--        function sauvegarderDonnees() {-->
+<!--            let donneesFormulaire = {};-->
+<!--            document.querySelectorAll('.container input, .container select, .container textarea').forEach(input => {-->
+<!--                donneesFormulaire[input.name] = input.value;-->
+<!--            });-->
+<!--            localStorage.setItem('donneesFormulaire', JSON.stringify(donneesFormulaire));-->
+<!--        }-->
+
+<!--        // Écouter les changements dans le formulaire-->
+<!--        document.querySelector('.container').addEventListener('input', sauvegarderDonnees);-->
+
+<!--        // Fonction pour restaurer les données du formulaire-->
+<!--        function restaurerDonnees() {-->
+<!--            if (localStorage.getItem('donneesFormulaire')) {-->
+<!--                let donnees = JSON.parse(localStorage.getItem('donneesFormulaire'));-->
+<!--                document.querySelectorAll('.container input, .container select, .container textarea').forEach(input => {-->
+<!--                    input.value = donnees[input.name] || '';-->
+<!--                });-->
+<!--            }-->
+<!--        }-->
+
+<!--        // Restaurer les données lors du chargement de la page-->
+<!--        document.addEventListener('DOMContentLoaded', restaurerDonnees);-->
+<!--    </script>-->
+</body>
+</html>
+

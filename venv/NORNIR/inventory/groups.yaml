@@ -1,0 +1,5 @@
+# groups.yaml
+---
+cisco: {}
+juniper: {}
+aruba: {}
