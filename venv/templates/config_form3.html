@@ -167,25 +167,38 @@
 <!-- Script JavaScript pour ajouter des VLANs -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        var addVlanButton = document.getElementById('add_vlan');
-        var vlansDiv = document.getElementById('vlans');
+    var addVlanButton = document.getElementById('add_vlan');
+    var vlansDiv = document.getElementById('vlans');
 
-        addVlanButton.addEventListener('click', function() {
-            var newVlan = document.createElement('div');
-            newVlan.className = 'row';
-            newVlan.innerHTML = `
-                <div class="col-md-3 form-group">
-                    <label>ID du VLAN:</label>
-                    <input type="number" class="form-control" name="vlan_id">
-                </div>
-                <div class="col-md-3 form-group">
-                    <label>Nom du VLAN:</label>
-                    <input type="text" class="form-control" name="vlan_name" pattern="[^ ]*">
-                </div>
-            `;
-            vlansDiv.appendChild(newVlan);
+    addVlanButton.addEventListener('click', function() {
+        var newVlan = document.createElement('div');
+        newVlan.className = 'row vlan-group';
+        newVlan.innerHTML = `
+            <div class="col-md-3 form-group">
+                <label>ID du VLAN:</label>
+                <input type="number" class="form-control" name="vlan_id">
+            </div>
+            <div class="col-md-3 form-group">
+                <label>Nom du VLAN:</label>
+                <input type="text" class="form-control" name="vlan_name" pattern="[^ ]*">
+            </div>
+            <div class="col-md-3 form-group form-check">
+                <input type="checkbox" class="form-check-input" name="save_as_template">
+                <label class="form-check-label">Sauvegarder en tant que Template</label>
+            </div>
+            <div class="col-md-3 form-group">
+                <button type="button" class="btn btn-danger btn-remove-vlan">Retirer</button>
+            </div>
+        `;
+        vlansDiv.appendChild(newVlan);
+
+        // Ajoutez un écouteur d'événements pour chaque bouton "Retirer"
+        newVlan.querySelector('.btn-remove-vlan').addEventListener('click', function() {
+            this.closest('.vlan-group').remove();
         });
     });
+});
+
 </script>
 
 <!-- Script affichier Upload fichier -->
